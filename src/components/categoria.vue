@@ -30,21 +30,21 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="12" md="12">
                       <v-text-field
                         v-model="editedItem.nombre"
                         label="Nombre"
                         autofocus
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="12" md="12">
                       <v-text-field
                         v-model="editedItem.descripcion"
                         label="descripcion"
                       ></v-text-field>
                     </v-col>
                      
-                      <v-col cols="12" sm="6" md="4" v-show="editedItem.valida">
+                      <v-col cols="12" sm="12" md="12" v-show="editedItem.valida">
                      <div class="red--text" v-for="v in editedItem.validaMensaje" :key="v" v-text="v"></div>
                     </v-col>
                     
@@ -189,10 +189,11 @@ export default {
     },
     listar() {
       const me = this;
-      axios
-        .get("/categoria/list")
-        .then(function (response) {
-          // console.log(response);
+        let header={"Token" : this.$store.state.token};
+        let configuracion= {headers : header};
+        //console.log(configuracion);
+      axios.get("/categoria/list", configuracion).then(function (response) {
+          console.log(response);
           me.categorias = response.data;
         })
         .catch(function (error) {
@@ -233,12 +234,14 @@ export default {
 
 guardar(){
   let me=this;
+  let header={"Token" : this.$store.state.token};
+        let configuracion= {headers : header};
   if (this.validar()){
     return;
   }
   if(this.editedItem.editedIndex >-1){
 //CODIGO PARA EDITAR
- axios.put('/categoria/update',{'nombre':this.editedItem.nombre,'descripcion':this.editedItem.descripcion, 'id':this.editedItem.id,})
+ axios.put('/categoria/update',{'nombre':this.editedItem.nombre,'descripcion':this.editedItem.descripcion, 'id':this.editedItem.id}, configuracion)
     .then(function(response){
         me.limpiar();
         me.close();
@@ -249,7 +252,7 @@ guardar(){
             });
   }else{ 
     //CODIGO PARA GUARDAR
-    axios.post('/categoria/add',{'nombre':this.editedItem.nombre,'descripcion':this.editedItem.descripcion})
+    axios.post('/categoria/add',{'nombre':this.editedItem.nombre,'descripcion':this.editedItem.descripcion}, configuracion)
     .then(function(response){
         me.limpiar();
         me.close();
@@ -288,7 +291,9 @@ activarDesactivarCerrar(){
 //ACTIVAR
    activar(){
      let me= this;
-axios.put('/categoria/activar',{'id':this.editedItem.adId})
+     let header={"Token" : this.$store.state.token};
+        let configuracion= {headers : header};
+axios.put('/categoria/activar',{'id':this.editedItem.adId}, configuracion)
     .then(function(response){
       me.editedItem.adModal=0;
        me.editedItem.adAccion=0;
@@ -303,7 +308,9 @@ axios.put('/categoria/activar',{'id':this.editedItem.adId})
    //DESACTIVAR
    desactivar(){
 let me=this;
-axios.put('/categoria/desactivar',{'id':this.editedItem.adId})
+let header={"Token" : this.$store.state.token};
+        let configuracion= {headers : header};
+axios.put('/categoria/desactivar',{'id':this.editedItem.adId}, configuracion)
     .then(function(response){
       me.editedItem.adModal=0;
        me.editedItem.adAccion=0;

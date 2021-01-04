@@ -17,6 +17,7 @@
     "express-session": "^1.17.1",
     "express-validator": "^6.9.0",
     "font-awesome": "^4.7.0",
+    "jwt-decode": "^3.1.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",

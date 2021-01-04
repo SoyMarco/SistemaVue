@@ -1,12 +1,14 @@
 <template>
   <v-app id="app">
     <v-navigation-drawer
-      v-model="drawer"
+      fixed
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
+      v-model="drawer"
+      v-if="logueado"
     >
       <v-list dense>
-        <template>
+        <template v-if="esAdministrador || esAlmacenero || esVendedor">
           <v-list-item :to="{name: 'home'}">
             <v-list-item-action>
               <v-icon>home</v-icon>
@@ -16,7 +18,7 @@
             </v-list-item-title>
           </v-list-item>
         </template>
-        <template>
+        <template v-if="esAdministrador || esAlmacenero">
           <v-list-group>
             <v-list-item slot="activator">
               <v-list-item-content>
@@ -47,7 +49,7 @@
             </v-list-item>
           </v-list-group>
         </template>
-        <template>
+        <template v-if="esAdministrador || esAlmacenero">
           <v-list-group>
             <v-list-item slot="activator">
               <v-list-item-content>
@@ -78,7 +80,7 @@
             </v-list-item>
           </v-list-group>
         </template>
-        <template>
+        <template v-if="esAdministrador || esVendedor">
           <v-list-group>
             <v-list-item slot="activator">
               <v-list-item-content>
@@ -109,7 +111,7 @@
             </v-list-item>
           </v-list-group>
         </template>
-        <template>
+        <template v-if="esAdministrador ">
           <v-list-group>
             <v-list-item slot="activator">
               <v-list-item-content>
@@ -118,7 +120,7 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item :to="{name: ''}">
+            <v-list-item :to="{name: 'usuario'}">
               <v-list-item-action>
                 <v-icon>table_chart</v-icon>
               </v-list-item-action>
@@ -130,7 +132,7 @@
             </v-list-item>
           </v-list-group>
         </template>
-        <template>
+        <template v-if="esAdministrador || esAlmacenero || esVendedor">
           <v-list-group>
             <v-list-item slot="activator">
               <v-list-item-content>
@@ -178,10 +180,15 @@
         <span class="hidden-sm-and-down">Sistema</span>
       </v-toolbar-title>      
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>logout</v-icon>
+
+      <v-btn @click="salir()" icon v-if="logueado">
+        <v-icon>logout</v-icon>Salir.......
       </v-btn>
-    </v-app-bar>
+       <v-btn :to="{name:'login'}" icon v-else>
+        <v-icon>apps</v-icon>Ingrese.......
+      </v-btn>
+
+      </v-app-bar>
     <v-main>
       <v-container
         fluid
@@ -192,12 +199,13 @@
         </v-slide-y-transition>
       </v-container>
     </v-main>
+
     <v-footer height="auto">
       <v-layout justify-center>
         <v-flex text-xs-center>
           <v-card flat tile color="primary" class="white--text">
             <v-card-text class="white--text pt-0">
-              IncanatoIT &copy;2019
+              Marco ASR &copy;2021
             </v-card-text>
           </v-card>
         </v-flex>
@@ -207,46 +215,34 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      dialog: false,
-      drawer: null,
-      items: [
-        { icon: 'contacts', text: 'Contacts' },
-        { icon: 'history', text: 'Frequently contacted' },
-        { icon: 'content_copy', text: 'Duplicates' },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'Labels',
-          model: true,
-          children: [
-            { icon: 'add', text: 'Create label' }
-          ]
-        },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'More',
-          model: false,
-          children: [
-            { text: 'Import' },
-            { text: 'Export' },
-            { text: 'Print' },
-            { text: 'Undo changes' },
-            { text: 'Other contacts' }
-          ]
-        },
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'chat_bubble', text: 'Send feedback' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'phonelink', text: 'App downloads' },
-        { icon: 'keyboard', text: 'Go to the old version' },
-        { icon: 'edit', text: 'Edit' }
-      ]
-    }),
-    props: {
-      source: String
+export default {
+  name: 'App',
+  data () {
+    return {
+      drawer: true,
+    }
+  },
+  computed:{
+    logueado(){
+      return this.$store.state.usuario;
+    },
+    esAdministrador(){
+      return this.$store.state.usuario && this.$store.state.usuario.rol == 1;
+    },
+    esAlmacenero(){
+      return this.$store.state.usuario && this.$store.state.usuario.rol == 2;
+    },
+    esVendedor(){
+      return this.$store.state.usuario && this.$store.state.usuario.rol == 3;
+    }
+  },
+  created(){
+    this.$store.dispatch("autoLogin");
+  },
+  methods:{
+    salir(){
+      this.$store.dispatch("salir");
     }
   }
+}
 </script>

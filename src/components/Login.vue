@@ -18,14 +18,16 @@
                 </v-card-text>
                 <v-card-actions class="px-3 pb-3">
                     <v-flex text-xs-right>
-                        <v-btn @click="ingresar()" color="primary">Ingresar</v-btn>
+                        <v-btn  @click="ingresar()" color="primary">Ingresar</v-btn>
                     </v-flex>
                 </v-card-actions>
             </v-card>
         </v-flex>
     </v-layout>
 </template>
+
 <script>
+/* COMIENZA CODIGO */
 import axios from 'axios';
 export default {
     data (){
@@ -36,16 +38,19 @@ export default {
         }
     },
     methods:{
+        /* LOGIN */
         ingresar(){
             axios.post('/usuario/login',{'id': this.id, 'password': this.password})
-            .then(respuesta =>{
-                return respuesta.data;
-            })/* 
-            .then(data =>{
+            .then(res =>{
+                   //console.log(res.data);
+                 return res.data;
+            }) 
+            /* Si credenciales son correctas redirige a HOME */
+                .then(data =>{
                 this.$store.dispatch("guardarToken",data.tokenReturn);
                 this.$router.push({name: 'home'});
-            }) */
-            .catch(error =>{
+            }) 
+         .catch(error =>{
                 //console.log(eror);
                 this.errorM=null;
                 if (error.response.status==404){
@@ -58,4 +63,3 @@ export default {
     }
 }
 </script>
-
