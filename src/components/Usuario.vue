@@ -133,7 +133,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-    search: "",
+    search: '',
     usuarios: [],
     headers: [
       { text: "Nombre", value: "nombre", sortable: true },
@@ -149,14 +149,14 @@ export default {
     editedIndex: -1,
     editedItem: {
       id:'',
-      nombre: "",
+      nombre: '',
       rol:'',
       roles:['Administrador', 'Almacenero', 'Vendedor'],
       tipo_documento:'',
       documentos:['DNI','INE','PASAPORTE','CEDULA'],
       num_documento:'',
-      direccion: "",
-      telefono: "",
+      direccion: '',
+      telefono: '',
       email:'',
       password:'',
       valida: 0,
@@ -167,9 +167,9 @@ export default {
       adId:''
     },
     defaultItem: {
-      nombre: "",
-      descripcion: "",
-      estado: "",
+      nombre: '',
+      descripcion: '',
+      estado: '',
     },
   }),
 
